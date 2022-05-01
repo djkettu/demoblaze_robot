@@ -2,8 +2,6 @@
 Documentation                       Test to verify that demoblaze.com purchase flow
 ...                                 happy path works.
 Resource                            ../Resources/demoblaze.resource
-Library                             Collections
-Library                             String
 
 Test Setup                          Open Context and Page
 

@@ -1,12 +1,14 @@
 *** Settings ***
 Documentation                       Resources for demoblaze.com purchase flow testing.
 Library                             Browser         #enable_presenter_mode=true
+Library                             Collections
+Library                             String
 
 *** Variables ***
 ${BASEURL}                          https://www.demoblaze.com
 ${BROWSER}                          chromium
 ${HEADLESS}                         false
-${TIMEOUT}                          20
+${TIMEOUT}                          20s
 ${VIEWPORT}                         'width':1366, 'height':768
 &{TESTUSERS}                        firstUser=foo
 ...                                 secondUser=foo2
@@ -36,11 +38,9 @@ ${CART}                             ${NAVBAR} >> "Cart"
 
 *** Keywords ***
 Open Context And Page
-    # Start Watch
-    New Browser
-    New Context                     viewport={'width': 1366, 'height': 768}
+    New Browser                     browser=${BROWSER}    timeout=${TIMEOUT}    headless=${HEADLESS}
+    New Context                     viewport={${VIEWPORT}}
     New Page                        ${BASEURL}
-    # Log Time                        New Browser
 
 Log In To Shop
     Click                           ${NAVBAR} >> \#login2
@@ -80,8 +80,8 @@ Go To Cart And Place Order
     Take Screenshot                 selector=.sweet-alert
     Click                           .sweet-alert >> .sa-button-container >> "OK"
 
+# Need to refactor to take selectors as argument instead of names.
 Purchase a Product
-    [Tags]                  UI    
     [Arguments]                     ${CATEGORY_NAME}    ${PRODUCT_NAME}
     Log In To Shop
     Select Category                 ${CATEGORY}[${CATEGORY_NAME}]
